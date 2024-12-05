@@ -2,7 +2,7 @@ import express from 'express';
 import pino from 'pino-http';
 import dotenv from 'dotenv';
 import cors from 'cors';
-import { getEnvVar } from './utils/getEnvVar';
+import { getEnvVar } from './utils/getEnvVar.js';
 
 dotenv.config();
 
