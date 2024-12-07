@@ -22,20 +22,19 @@ export const startServer = () => {
     }),
   );
 
-  app.get('/', (reg, res) => {
-    res.json
-    ({
-      message: 'Hello world'
+  app.get('/', (req, res) => {
+    res.json({
+      message: 'Hello world',
     });
   });
 
-  app.use('*', (reg, res, next) => {
+  app.use('*', (req, res) => {
     res.status(404).json({
       message: 'Not found',
     });
   });
 
-  app.use((err, reg, res, next) => {
+  app.use((err, req, res, next) => {
     res.status(500).json({
       message: 'Something went wrong',
       error: err.message,
