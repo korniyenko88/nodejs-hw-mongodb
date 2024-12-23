@@ -1,6 +1,8 @@
 import * as contactServices from '../services/contacts.js';
 import createError from 'http-errors';
 
+
+
 export const getContactsController = async (req, res) => {
   const data = await contactServices.getAllContacts();
 
@@ -31,8 +33,12 @@ export const getContactsByIdController = async (req, res) => {
 };
 
 export const addContactController = async (req, res) => {
-  const data = await contactServices.addContact(req.body);
+  const { error } = contactAddSchema.validate(req.body);
+  if (error) {
+    throw createError(400, error.message);
+  }
 
+  const data = await contactServices.addContact(req.body);
   res.status(201).json({
     status: 201,
     message: 'Successfully created a contact!',
@@ -53,7 +59,6 @@ export const updateContactController = async (req, res) => {
     data: result.data,
   });
 };
-
 
 export const deleteContactController = async (req, res) => {
   const { contactId } = req.params;
