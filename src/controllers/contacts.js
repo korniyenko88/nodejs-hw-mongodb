@@ -1,9 +1,5 @@
 import * as contactServices from '../services/contacts.js';
 import createError from 'http-errors';
-import { contactAddSchema } from '../validation/contacts.js';
-
-
-
 
 export const getContactsController = async (req, res) => {
   const data = await contactServices.getAllContacts();
@@ -35,11 +31,6 @@ export const getContactsByIdController = async (req, res) => {
 };
 
 export const addContactController = async (req, res) => {
-  const { error } = contactAddSchema.validate(req.body);
-  if (error) {
-    throw createError(400, error.message);
-  }
-
   const data = await contactServices.addContact(req.body);
   res.status(201).json({
     status: 201,
