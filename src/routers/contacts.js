@@ -6,10 +6,10 @@ import {
   idSchema,
 } from '../validation/contacts.js';
 import { validateBody } from '../middlewares/validateBody.js';
-
+import { isValidId } from '../middlewares/isValidId.js';
 
 import * as contactsController from '../controllers/contacts.js';
-import { isValidId } from '../middlewares/isValidId.js';
+
 
 
 
