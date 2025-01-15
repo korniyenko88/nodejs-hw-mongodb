@@ -5,9 +5,12 @@ import { parsePaginationParams } from '../utils/parsePaginationParams.js';
 import { parseSortParams } from '../utils/parseSortParams.js';
 
 export const getContactsController = async (req, res) => {
+ 
   const { page, perPage } = parsePaginationParams(req.query);
   const { sortBy, sortOrder } = parseSortParams(req.query, sortByList);
   const filter = { userId: req.user._id };
+
+  
 
   const data = await contactServices.getAllContacts({
     page,
