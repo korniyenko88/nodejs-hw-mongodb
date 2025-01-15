@@ -1,19 +1,23 @@
 import { Router } from 'express';
+import { isValidId } from '../middlewares/isValidId.js';
+import { validateBody } from '../middlewares/validateBody.js';
+import { authenticate } from '../middlewares/authenticate.js';
 import { ctrlWrapper } from '../utils/ctrlWrapper.js';
 import {
   contactAddSchema,
   contactUpdateSchema,
-  idSchema,
+  idSchema
 } from '../validation/contacts.js';
-import { validateBody } from '../middlewares/validateBody.js';
-import { isValidId } from '../middlewares/isValidId.js';
 
 import * as contactsController from '../controllers/contacts.js';
 
 
 
 
+
 const contactsRouter = Router();
+
+contactsRouter.use(authenticate);
 
 contactsRouter.get('/', ctrlWrapper(contactsController.getContactsController));
 
