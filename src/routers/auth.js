@@ -8,7 +8,7 @@ import * as authController from '../controllers/auth.js';
 const authRouter = Router();
 
 authRouter.post(
-  '/registr',
+  '/register',
   validateBody(authRegisterSchema),
   ctrlWrapper(authController.registerController)
 );

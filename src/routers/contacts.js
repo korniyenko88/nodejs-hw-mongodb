@@ -6,14 +6,10 @@ import { ctrlWrapper } from '../utils/ctrlWrapper.js';
 import {
   contactAddSchema,
   contactUpdateSchema,
-  idSchema
+  idSchema,
 } from '../validation/contacts.js';
 
 import * as contactsController from '../controllers/contacts.js';
-
-
-
-
 
 const contactsRouter = Router();
 
