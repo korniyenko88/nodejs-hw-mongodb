@@ -10,8 +10,12 @@ const authRouter = Router();
 authRouter.post(
   '/register',
   validateBody(authRegisterSchema),
-  ctrlWrapper(authController.registerController)
+  ctrlWrapper(authController.registerController),
 );
+
+authRouter.get(
+  '/verify',
+  ctrlWrapper(authController.verifyController));
 
 authRouter.post(
   '/login',
