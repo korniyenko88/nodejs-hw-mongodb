@@ -4,6 +4,7 @@ import * as contactServices from '../services/contacts.js';
 import { parsePaginationParams } from '../utils/parsePaginationParams.js';
 import { parseSortParams } from '../utils/parseSortParams.js';
 
+
 export const getContactsController = async (req, res) => {
  
   const { page, perPage } = parsePaginationParams(req.query);
@@ -30,12 +31,15 @@ export const getContactsController = async (req, res) => {
 
 export const getContactsByIdController = async (req, res) => {
   const { _id: userId } = req.user;
-  const { _id: contactId } = req.params;
+  console.log('User ID:', userId); // Виводимо User ID
+  console.log('Request Params:', req.params); // Виводимо req.params для перевірки
+  const { contactId: _id } = req.params;
+  console.log('Contact ID:', _id); // Виводимо Contact ID
 
-  const data = await contactServices.getContact({ contactId, userId });
+  const data = await contactServices.getContactById({ _id, userId });
 
   if (!data) {
-    throw createError(404, `Contact with id=${contactId} not found`);
+    throw createError(404, `Contact with id=${_id} not found`);
     //   const error = new Error(`Contact with id=${contactId} not found`);
     //   error.status = 404;
     //   throw error;
@@ -43,7 +47,7 @@ export const getContactsByIdController = async (req, res) => {
 
   res.json({
     status: 200,
-    message: `Successfully found contact with id=${contactId}!`,
+    message: `Successfully found contact with id=${_id}!`,
     data,
   });
 };
