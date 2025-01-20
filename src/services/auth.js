@@ -5,6 +5,7 @@ import bcrypt from 'bcrypt';
 import path from 'path';
 import jwt from 'jsonwebtoken';
 import Handlebars from 'handlebars';
+import fs from 'node:fs/promises';
 
 import { randomBytes } from 'crypto';
 import {
@@ -82,12 +83,56 @@ export const requestResetToken = async (email) => {
     },
   );
 
+  const resetPasswordTemplatePath = path.join(
+    TEMPLATES_DIR,
+    'reset-password-email.html',
+  );
+
+  const templateSource = (
+    await fs.readFile(resetPasswordTemplatePath, 'utf-8')
+  ).toString();
+
+  const template = Handlebars.compile(templateSource);
+  console.log('Compiled template:', template);
+  const html = template({
+    name: user.name,
+    link: `${getEnvVar('APP_DOMEIN')}/reset-password?token=${resetToken}`,
+  });
+
+
   await sendResetMail({
     from: getEnvVar(SMTP.SMTP_FROM),
     to: email,
     subject: 'Reset your password',
-    html: `<p>Click <a href="${resetToken}">here</a> to reset your password!</p>`,
+    html,
   });
+};
+
+export const resetPassword = async (payload) => {
+  let entries;
+
+  try {
+    entries = jwt.verify(payload.token, getEnvVar('JWC_SECRET'));
+  } catch (err) {
+    if (err instanceof Error) throw createHttpError(401, err.message);
+    throw err;
+  }
+
+  const user = await userCollection.findOne({
+    email: entries.email,
+    _id: entries.sub,
+  });
+
+  if (!user) {
+    throw createHttpError(404, 'User not found');
+  }
+
+  const encryptedPassword = await bcrypt.hash(payload.password, 10);
+
+  await userCollection.updateOne(
+    { _id: user._id },
+    { password: encryptedPassword },
+  );
 };
 
 export const verify = async token => {

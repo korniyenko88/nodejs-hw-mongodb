@@ -35,6 +35,15 @@ export const sendResetEmailController = async (req, res) => {
   });
 };
 
+export const resetPasswordController = async (req, res) => {
+  await authServices.resetPassword(req.body);
+  res.json({
+    message: 'Password was successfully reset!',
+    status: 200,
+    data: {},
+  });
+};
+
 export const verifyController = async(req, res)=> {
     const {token} = req.query;
     await authServices.verify(token);
