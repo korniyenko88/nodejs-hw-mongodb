@@ -24,7 +24,7 @@ import { sendResetMail } from '../utils/sendResetMail.js';
 const emailTemplatePath = path.join(TEMPLATES_DIR, 'verify-email.html');
 const emailTemplateSource = await readFile(emailTemplatePath, 'utf-8');
 const appDomain = getEnvVar('APP_DOMEIN');
-const jwtSecret = getEnvVar('JWC_SECRET');
+const jwtSecret = getEnvVar('JWT_SECRET');
 
 
 const createSessionData = () => ({
@@ -77,7 +77,7 @@ export const requestResetToken = async (email) => {
       sub: user._id,
       email,
     },
-    getEnvVar('JWC_SECRET'),
+    getEnvVar('JWT_SECRET'),
     {
       expiresIn: '5m',
     },
@@ -119,7 +119,7 @@ export const resetPassword = async (payload) => {
   let entries;
 
   try {
-    entries = jwt.verify(payload.token, getEnvVar('JWC_SECRET'));
+    entries = jwt.verify(payload.token, getEnvVar('JWT_SECRET'));
   } catch (err) {
     if (err instanceof Error) throw createHttpError(401, err.message);
     throw err;
