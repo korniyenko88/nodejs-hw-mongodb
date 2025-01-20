@@ -23,6 +23,18 @@ export const registerController = async (req, res) => {
   });
 };
 
+
+export const sendResetEmailController = async (req, res) => {
+
+  await authServices.requestResetToken(req.body.email);
+
+  res.json({
+    message: 'Reset password email was successfully sent!',
+    status: 200,
+    data: {},
+  });
+};
+
 export const verifyController = async(req, res)=> {
     const {token} = req.query;
     await authServices.verify(token);

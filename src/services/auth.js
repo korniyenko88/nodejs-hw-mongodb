@@ -15,7 +15,8 @@ import { TEMPLATES_DIR } from '../constants/index.js';
 import { sendEmail } from '../utils/sendEmail.js';
 import { readFile } from 'node:fs/promises';
 import { getEnvVar } from '../utils/getEnvVar.js';
-
+import { SMTP } from '../constants/index.js';
+import { sendResetMail } from '../utils/sendResetMail.js';
 
 
 
@@ -62,6 +63,31 @@ export const registr = async (payload) => {
    await sendEmail(verifyEmail);
 
   return newUser;
+};
+
+export const requestResetToken = async (email) => {
+  const user = await userCollection.findOne({ email });
+  if (!user) {
+    throw createHttpError(404, 'User not found');
+  }
+
+  const resetToken = jwt.sign(
+    {
+      sub: user._id,
+      email,
+    },
+    getEnvVar('JWC_SECRET'),
+    {
+      expiresIn: '5m',
+    },
+  );
+
+  await sendResetMail({
+    from: getEnvVar(SMTP.SMTP_FROM),
+    to: email,
+    subject: 'Reset your password',
+    html: `<p>Click <a href="${resetToken}">here</a> to reset your password!</p>`,
+  });
 };
 
 export const verify = async token => {

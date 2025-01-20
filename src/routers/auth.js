@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { validateBody } from '../middlewares/validateBody.js';
-import { authLoginSchema, authRegisterSchema } from '../validation/auth.js';
+import { authLoginSchema, authRegisterSchema, requestResetEmailSchema } from '../validation/auth.js';
 import { ctrlWrapper } from '../utils/ctrlWrapper.js';
 
 import * as authController from '../controllers/auth.js';
@@ -13,9 +13,13 @@ authRouter.post(
   ctrlWrapper(authController.registerController),
 );
 
-authRouter.get(
-  '/verify',
-  ctrlWrapper(authController.verifyController));
+authRouter.post(
+  '/send-reset-email',
+  validateBody(requestResetEmailSchema),
+  ctrlWrapper(authController.sendResetEmailController),
+);
+
+authRouter.get('/verify', ctrlWrapper(authController.verifyController));
 
 authRouter.post(
   '/login',
