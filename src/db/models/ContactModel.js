@@ -41,7 +41,7 @@ const contactSchema = new Schema(
 );
 
 contactSchema.post('save', hendelSaveError);
-contactSchema.pre('findeOneAndUpdate', setUpdateSettings);
+contactSchema.pre('findOneAndUpdate', setUpdateSettings);
 
 contactSchema.post('findOneAndUpdate', hendelSaveError);
 
