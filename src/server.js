@@ -15,6 +15,7 @@ export const setupServer = () => {
   const app = express();
   const PORT = Number(getEnvVar('PORT', 3000));
   app.use(logger);
+  app.use(express.static('uploads'));
   app.use(cookieParser());
   app.use(express.json());
   app.use(cors());

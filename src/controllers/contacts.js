@@ -1,23 +1,24 @@
 import createError from 'http-errors';
 import { sortByList } from '../db/models/ContactModel.js';
 import * as contactServices from '../services/contacts.js';
+import { getEnvVar } from '../utils/getEnvVar.js';
 import { parsePaginationParams } from '../utils/parsePaginationParams.js';
 import { parseSortParams } from '../utils/parseSortParams.js';
+import { saveFileToCloudinary } from '../utils/saveFileToCloudinary.js';
+import { saveFileToUploadsDir } from '../utils/saveFileToUploadsDir.js';
+
 
 export const getContactsController = async (req, res) => {
- 
   const { page, perPage } = parsePaginationParams(req.query);
   const { sortBy, sortOrder } = parseSortParams(req.query, sortByList);
   const filter = { userId: req.user._id };
-
-  
 
   const data = await contactServices.getAllContacts({
     page,
     perPage,
     sortBy,
     sortOrder,
-    filter
+    filter,
   });
   console.log(page);
   console.log(perPage);
@@ -49,8 +50,17 @@ export const getContactsByIdController = async (req, res) => {
 };
 
 export const addContactController = async (req, res) => {
+  const cloudinaryEnable = getEnvVar('CLOUDINARY_ENABLE') === 'true';
+
+  let photo;
+  if (req.file) {
+    if (cloudinaryEnable) {
+      photo = await saveFileToCloudinary(req.file);
+    } else photo = await saveFileToUploadsDir(req.file);
+  }
+
   const { _id: userId } = req.user;
-  const data = await contactServices.addContact({...req.body, userId});
+  const data = await contactServices.addContact({...req.body, photo, userId});
   res.status(201).json({
     status: 201,
     message: 'Successfully created a contact!',
@@ -60,10 +70,10 @@ export const addContactController = async (req, res) => {
 
 export const updateContactController = async (req, res) => {
   const { _id: userId } = req.user;
-  const { contactId } = req.params;
+  const { contactId: _id } = req.params;
   const updateData = req.body;
   const result = await contactServices.updateContact(
-    { contactId, userId },
+    { _id, userId },
     updateData,
   );
   if (!result) {
@@ -78,10 +88,10 @@ export const updateContactController = async (req, res) => {
 
 export const deleteContactController = async (req, res) => {
   const { _id: userId } = req.user;
-  const { contactId } = req.params;
+  const { contactId: _id } = req.params;
   console.log('Contact ID to delete:', contactId);
   console.log('Type of Contact ID:', typeof contactId);
-  const data = await contactServices.deleteContact({ contactId, userId });
+  const data = await contactServices.deleteContact({ _id, userId });
   if (!data) {
     throw createError(404, 'Contact not found');
   }
