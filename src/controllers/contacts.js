@@ -31,10 +31,8 @@ export const getContactsController = async (req, res) => {
 
 export const getContactsByIdController = async (req, res) => {
   const { _id: userId } = req.user;
-  console.log('User ID:', userId); // Виводимо User ID
-  console.log('Request Params:', req.params); // Виводимо req.params для перевірки
   const { contactId: _id } = req.params;
-  console.log('Contact ID:', _id); // Виводимо Contact ID
+  
 
   const data = await contactServices.getContactById({ _id, userId });
 
@@ -63,11 +61,11 @@ export const addContactController = async (req, res) => {
 };
 
 export const updateContactController = async (req, res) => {
-  const { _id: userId } = req.user;
-  const { contactId } = req.params;
+ const { _id: userId } = req.user;
+ const { contactId: _id } = req.params;
   const updateData = req.body;
   const result = await contactServices.updateContact(
-    { contactId, userId },
+    { _id, userId },
     updateData,
   );
   if (!result) {
@@ -81,11 +79,14 @@ export const updateContactController = async (req, res) => {
 };
 
 export const deleteContactController = async (req, res) => {
-  const { _id: userId } = req.user;
-  const { contactId } = req.params;
-  console.log('Contact ID to delete:', contactId);
+   const { _id: userId } = req.user;
+   const { contactId: _id } = req.params;
+  
+  console.log('user ID to delete:', userId);
+  console.log('Contact ID to delete:', _id);
   console.log('Type of Contact ID:', typeof contactId);
-  const data = await contactServices.deleteContact({ contactId, userId });
+  const data = await contactServices.deleteContact({ _id, userId });
+  
   if (!data) {
     throw createError(404, 'Contact not found');
   }
