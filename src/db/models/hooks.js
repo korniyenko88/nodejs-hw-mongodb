@@ -4,20 +4,20 @@ export const hendelSaveError = (error, doc, next) => {
   next();
 };
 
-export const setUpdateSettings = function (next) {
-  this.option.new = true;
-  this.option.runValidators = true;
-  next()
-};
-
 // export const setUpdateSettings = function (next) {
-//   if (!this.option) {
-//     this.option = {};
-//   }
 //   this.option.new = true;
 //   this.option.runValidators = true;
-
-//   if (next && typeof next === 'function') {
-//     next();
-//   }
+//   next()
 // };
+
+export const setUpdateSettings = function (next) {
+  if (!this.option) {
+    this.option = {};
+  }
+  this.option.new = true;
+  this.option.runValidators = true;
+
+  if (next && typeof next === 'function') {
+    next();
+  }
+};

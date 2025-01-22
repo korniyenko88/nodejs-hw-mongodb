@@ -17,8 +17,7 @@ export const getAllContacts = async ({
     .skip(skip)
     .limit(limit)
     .sort({ [sortBy]: sortOrder });
-  
-  
+
   const total = await ContactsCollection.countDocuments(filter);
   const totalItems = await ContactsCollection.countDocuments(filter);
   const paginationData = calcPaginationData({ total, page, perPage });
@@ -40,7 +39,7 @@ export const addContact = (payload) => ContactsCollection.create(payload);
 
 export const updateContact = async (filter, payload) => {
   const result = await ContactsCollection.findOneAndUpdate(filter, payload, {
-   
+    new: true,
     runValidators: true,
   });
 
