@@ -40,7 +40,7 @@ export const addContact = (payload) => ContactsCollection.create(payload);
 
 export const updateContact = async (filter, payload) => {
   const result = await ContactsCollection.findOneAndUpdate(filter, payload, {
-    new: true,
+   
     runValidators: true,
   });
 
