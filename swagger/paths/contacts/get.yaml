@@ -61,8 +61,8 @@ responses:
                 - perPage
                 - totalItems
                 - totalPages
-                - hasNextPage
                 - hasPreviousPage
+                - hasNextPage
               properties:
                 data:
                   type: array
