@@ -1,0 +1,41 @@
+type: object
+required:
+  - _id
+  - name
+  - email
+  - phoneNumber
+  - isFavourite
+  - contactType
+properties:
+  _id:
+    description: 'Unique user identifier'
+    type: string
+    example: '6790e807bda0630f98bbffd4'
+  name:
+    description: 'Contact name'
+    type: string
+    example: 'Brad Jackson'
+  email:
+    description: 'Contact email'
+    type: string
+    example: 'Jone Jones'
+  phoneNumber:
+    description: 'The phone number of the contact'
+    type: string
+    example: '012-123-12-12'
+  contactType:
+    description: 'The type of the contact'
+    type: string
+    example: 'personal'
+    enum: ['work', 'home', 'personal']
+  isFavourite:
+    description: 'Preferred contact'
+    type: boolean
+  userId:
+    description: 'The ID of the parent user for this contact'
+    type: string
+    example: '6790e807bda0630f98bbffd4'
+  photo:
+    description: 'Link to contact photo'
+    type: string
+    example: 'https://res.cloudinary.com/dvb7eqx9j/image/upload/v1737550981/photo/tr8f6guvcuia2ourmdfm.gif'
